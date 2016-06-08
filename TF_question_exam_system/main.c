@@ -20,6 +20,7 @@
 #include <time.h>
 #include "JsonHelper.h"
 #define FILENAME "questions.dat"
+#define MAXSIZE 1000
 
 int num = 0;//记录组题的总数
 int* index;//记录组题的题号
@@ -113,6 +114,21 @@ void option5()//答题功能
 	printf("\n\n答题结束，答对%d道，准确率：%5.2lf%%\n", right, 100.0*right / (double)num);
 	answer = 1;
 }
+void option6()
+{
+	CleanFile(FILENAME);
+	free(questions);
+	questions = (struct Question*)malloc(sizeof(struct Question) * MAXSIZE);
+	question_num = 0;
+}
+void option7()
+{
+	WriteToFile(FILENAME, "[{\"number\":1,\"question\":\"中国建国于1949年\",\"answer\":1},{\"number\":2,\"question\":\"王浩宇特别白\",\"answer\":0},{\"number\":3,\"question\":\"报警电话是110\",\"answer\":1}]");
+	free(questions);
+	questions = (struct Question*)malloc(sizeof(struct Question) * MAXSIZE);
+	question_num = 0;
+	LoadFromFile(FILENAME);
+}
 void error()//处理1-5之外的输入
 {
 	printf("输入错误，请重新输入\n");
@@ -120,6 +136,7 @@ void error()//处理1-5之外的输入
 int main(int argc, const char * argv[])
 {
 	int option = 0;
+	questions = (struct Question*)malloc(sizeof(struct Question) * MAXSIZE);
 	LoadFromFile(FILENAME);//从文件读入题库
 	while (1)
 	{
@@ -128,6 +145,8 @@ int main(int argc, const char * argv[])
 		printf("输入3\t追加\n");
 		printf("输入4\t组题\n");
 		printf("输入5\t答题\n");
+		printf("输入6\t清空题库\n");
+		printf("输入7\t重置默认题库\n");
 		scanf("%d", &option);
 		printf("\n");
 		switch (option)
@@ -146,6 +165,12 @@ int main(int argc, const char * argv[])
 			break;
 		case 5:
 			option5();
+			break;
+		case 6:
+			option6();
+			break;
+		case 7:
+			option7();
 			break;
 		default:
 			error();

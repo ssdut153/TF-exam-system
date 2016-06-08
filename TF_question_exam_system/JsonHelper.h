@@ -93,20 +93,18 @@ void ImportJson(char* pJson)//解析json导入结构体数组
 {
 	cJSON * root = NULL, *item = NULL, *number, *question, *answer;
 	char *pr = NULL;
-	if (NULL == pJson)
+	if (NULL == pJson || *pJson == "")
 	{
 		printf("无数据！\n\n");
 		return;
 	}
 	if ((root = cJSON_Parse(pJson)) == NULL)
 	{
-		printf("无法解析该json数据！\n\n");
+		printf("无法解析该json数据或无数据！\n\n");
 		return;
 	}
-	free(questions);
 	int iSize = cJSON_GetArraySize(root);
 	question_num = iSize;
-	questions = (struct Question*)malloc(sizeof(struct Question)*iSize);
 	for (int iCnt = 0; iCnt < iSize; iCnt++)
 	{
 		//在代码中定义变量属于C++用法,对纯C代码可能有问题
@@ -125,7 +123,7 @@ void ImportJson(char* pJson)//解析json导入结构体数组
 		questions[iCnt].answer = atoi(cJSON_Print(answer));
 	}
 	cJSON_Delete(root);
-	printf("Json数据导入完成，题库共有%d道题\n\n",question_num);
+	printf("Json数据导入完成，题库共有%d道题\n\n", question_num);
 	return;
 }
 
