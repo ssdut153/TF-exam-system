@@ -114,14 +114,14 @@ void ImportJson(char* pJson)//解析json导入结构体数组
 		pr = cJSON_Print(pSub);
 		item = cJSON_Parse(pr);
 		if (NULL == pSub)
-		{
 			continue;
-		}
+		//将键值item从json节点中取出
 		number = cJSON_GetObjectItem(item, "number");
 		question = cJSON_GetObjectItem(item, "question");
 		answer = cJSON_GetObjectItem(item, "answer");
+		//加入到题库结构体数组
 		questions[iCnt].number = atoi(cJSON_Print(number));
-		strcpy(questions[iCnt].question, cJSON_Print(question));
+		strcpy(questions[iCnt].question, question->valuestring);
 		questions[iCnt].answer = atoi(cJSON_Print(answer));
 	}
 	cJSON_Delete(root);
